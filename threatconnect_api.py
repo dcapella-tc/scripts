@@ -4,7 +4,7 @@ import hmac
 import time
 from dataclasses import dataclass
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urlencode, urlparse
 
 import requests
 
@@ -57,12 +57,17 @@ class ThreatConnectAPI:
         authorization = f"TC {self._access_id}:{signature}"
         return _AuthHeaders(timestamp=timestamp, authorization=authorization)
 
-    def get_owners(self) -> dict[str, Any]:
-        path = "/v2/owners"
-        timestamp = str(int(time.time()))
-        auth = self._build_auth_headers("GET", path, timestamp)
+    def get(self, path: str, *, params: dict[str, str] | None = None) -> dict[str, Any]:
+        if not path.startswith("/"):
+            raise ValueError("path must start with '/' (e.g. '/v3/indicators')")
 
-        url = f"{self._base_url}{path}"
+        query = urlencode(params or {}, doseq=True)
+        path_and_query = f"{path}?{query}" if query else path
+
+        timestamp = str(int(time.time()))
+        auth = self._build_auth_headers("GET", path_and_query, timestamp)
+
+        url = f"{self._base_url}{path_and_query}"
         resp = self._session.get(
             url,
             headers={
@@ -88,3 +93,6 @@ class ThreatConnectAPI:
         if isinstance(payload, dict):
             return payload
         raise ThreatConnectAPIError(f"Unexpected response JSON type: {type(payload).__name__}")
+
+    def get_owners(self) -> dict[str, Any]:
+        return self.get("/v2/owners")
