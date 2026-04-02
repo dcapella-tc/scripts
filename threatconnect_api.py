@@ -96,3 +96,11 @@ class ThreatConnectAPI:
 
     def get_owners(self) -> dict[str, Any]:
         return self.get("/v2/owners")
+
+    def get_indicators(self, all: bool = False, *, params: dict[str, str] | None = None) -> dict[str, Any]:
+        if not all: 
+            return self.get("/v3/indicators", params=params)
+
+    def get_groups(self, all: bool = False, *, params: dict[str, str] | None = None) -> dict[str, Any]:
+        if not all: 
+            return self.get("/v3/groups", params=params)
