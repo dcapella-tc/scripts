@@ -31,16 +31,11 @@ schemaVersion: 1.1.0
 sdkVersion: 4.0.0
 sections:
 - params:
-  - label: JSON Data
-    name: json_data
-    note: The JSON data to be formatted.
+  - label: HTML
+    name: html
+    note: The HTML document or fragment to convert to JSON.
     playbookDataType:
-    - KeyValue
-    - KeyValueArray
     - String
-    - StringArray
-    - TCEntity
-    - TCEntityArray
     required: true
     validValues:
     - ${TEXT}

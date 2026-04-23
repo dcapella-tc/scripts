@@ -1,10 +1,10 @@
 """ThreatConnect Playbook App"""
 
 import json
-from typing import cast
 
 from tcex import TcEx
 
+from html_to_dict import html_string_to_dict
 from playbook_app import PlaybookApp  # Import default Playbook App Class (Required)
 
 
@@ -24,30 +24,20 @@ class App(PlaybookApp):
 
         This method should contain the core logic of the App.
         """
-        # use the unresolved version of the input variable
-        # so that tcex does not convert the JSON to a dict.
-        json_data = cast('str', self.in_unresolved.json_data)  # type: ignore
+        html = self.in_.html
+        if not isinstance(html, str):
+            self.tcex.exit.exit(1, 'HTML input must be a string.')
 
-        # get the playbook variable type
-        json_data_type = self.playbook.get_variable_type(json_data)
+        tree = html_string_to_dict(html)
 
-        # convert string input to dict
-        try:
-            if json_data_type in ['String']:
-                json_data = json.loads(self.in_.json_data)  # type: ignore
-        except ValueError:
-            self.tcex.exit.exit(1, 'Failed parsing JSON data.')
-
-        # generate the new "pretty" json (this will be used as an option variable)
         try:
             self.pretty_json = json.dumps(
-                json_data, indent=self.in_.indent, sort_keys=self.in_.sort_keys
+                tree, indent=self.in_.indent, sort_keys=self.in_.sort_keys
             )
-        except ValueError:
-            self.tcex.exit.exit(1, 'Failed parsing JSON data.')
+        except (TypeError, ValueError):
+            self.tcex.exit.exit(1, 'Failed serializing HTML tree to JSON.')
 
-        # set the App exit message
-        self.exit_message = 'JSON prettified.'
+        self.exit_message = 'HTML converted to JSON.'
 
     def write_output(self):
         """Write the Playbook output variables.
