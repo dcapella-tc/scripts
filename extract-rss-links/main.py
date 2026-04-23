@@ -14,6 +14,10 @@ DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (compatible; RSSFeedDiscover/1.0; +https://example.invalid/bot)"
 )
 
+DEFAULT_OUTPUT_NAME = "rss_feeds.json"
+KEY_ORIGINAL_URL = "original url"
+KEY_RSS_URL = "rss url"
+
 
 def _tag_attr_as_str(value: object) -> str | None:
     """Coerce BeautifulSoup attribute values (str, list, etc.) to a single string."""
@@ -91,12 +95,52 @@ def _load_urls_json(path: Path) -> list[str]:
     return out
 
 
+def build_feed_mapping(urls: list[str]) -> list[dict[str, str | None]]:
+    """Return one dict per input URL with ``original url`` and ``rss url`` (or null if not found)."""
+    rows: list[dict[str, str | None]] = []
+    for url in urls:
+        rows.append(
+            {
+                KEY_ORIGINAL_URL: url,
+                KEY_RSS_URL: discover_rss_feed_url(url),
+            }
+        )
+    return rows
+
+
+def save_feed_mapping(path: Path, rows: list[dict[str, str | None]]) -> None:
+    """Write ``rows`` as UTF-8 JSON with indentation and a trailing newline."""
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(rows, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+
+def _print_usage() -> None:
+    prog = Path(sys.argv[0]).name if sys.argv else "main.py"
+    print(
+        f"usage: {prog} [INPUT_URLS.json] [OUTPUT.json]\n"
+        f"  Reads a JSON array of page URLs, discovers RSS feed links, writes {DEFAULT_OUTPUT_NAME} "
+        "by default next to this script when paths are omitted.\n"
+        "  One optional argument: input JSON path (default: urls.json beside script).\n"
+        "  Two optional arguments: input path, then output JSON path.",
+        file=sys.stderr,
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = argv if argv is not None else sys.argv[1:]
+    if argv and argv[0] in ("-h", "--help"):
+        _print_usage()
+        return 0
+
     base = Path(__file__).resolve().parent
     urls_path = base / "urls.json"
-    if argv:
+    out_path = base / DEFAULT_OUTPUT_NAME
+
+    if len(argv) >= 1:
         urls_path = Path(argv[0]).expanduser()
+    if len(argv) >= 2:
+        out_path = Path(argv[1]).expanduser()
 
     try:
         urls = _load_urls_json(urls_path)
@@ -104,12 +148,14 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Error loading {urls_path}: {e}", file=sys.stderr)
         return 1
 
-    for url in urls:
-        feed = discover_rss_feed_url(url)
-        if feed is None:
-            print(f"{url}\t(no RSS link found)")
-        else:
-            print(f"{url}\t{feed}")
+    rows = build_feed_mapping(urls)
+    try:
+        save_feed_mapping(out_path, rows)
+    except OSError as e:
+        print(f"Error writing {out_path}: {e}", file=sys.stderr)
+        return 1
+
+    print(f"Wrote {len(rows)} row(s) to {out_path}")
     return 0
 
 

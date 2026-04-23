@@ -1,11 +1,21 @@
 """Tests for RSS feed URL discovery from HTML (no network)."""
 
+import json
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import httpx
 
-from main import _absolute_rss_url_from_html, discover_rss_feed_url
+from main import (
+    KEY_ORIGINAL_URL,
+    KEY_RSS_URL,
+    _absolute_rss_url_from_html,
+    build_feed_mapping,
+    discover_rss_feed_url,
+    save_feed_mapping,
+)
 
 
 class TestAbsoluteRssUrlFromHtml(unittest.TestCase):
@@ -98,6 +108,39 @@ class TestDiscoverRssFeedUrl(unittest.TestCase):
                 discover_rss_feed_url("https://example.com/start"),
                 "https://example.com/final/atom.xml",
             )
+
+
+class TestBuildFeedMapping(unittest.TestCase):
+    def test_keys_and_rss_none(self) -> None:
+        urls = ["https://a.example/", "https://b.example/"]
+        with patch(
+            "main.discover_rss_feed_url",
+            side_effect=["https://a.example/feed.xml", None],
+        ):
+            rows = build_feed_mapping(urls)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(rows[0][KEY_ORIGINAL_URL], "https://a.example/")
+        self.assertEqual(rows[0][KEY_RSS_URL], "https://a.example/feed.xml")
+        self.assertEqual(rows[1][KEY_ORIGINAL_URL], "https://b.example/")
+        self.assertIsNone(rows[1][KEY_RSS_URL])
+
+
+class TestSaveFeedMapping(unittest.TestCase):
+    def test_roundtrip_json(self) -> None:
+        rows = [
+            {KEY_ORIGINAL_URL: "https://x.example/", KEY_RSS_URL: None},
+            {
+                KEY_ORIGINAL_URL: "https://y.example/blog",
+                KEY_RSS_URL: "https://y.example/blog/rss",
+            },
+        ]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "out.json"
+            save_feed_mapping(path, rows)
+            text = path.read_text(encoding="utf-8")
+            loaded = json.loads(text)
+        self.assertEqual(loaded, rows)
+        self.assertTrue(text.endswith("\n"))
 
 
 if __name__ == "__main__":
