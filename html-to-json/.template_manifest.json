@@ -1,0 +1,92 @@
+{
+  "_app_common/.coveragerc": {
+    "md5": "d51ce32ae5bc397f95e4e6bf225210fb",
+    "sha": "d70463b845a6d58f9069d02670eaeddf9bb1ee7f"
+  },
+  "_app_common/.gitignore": {
+    "md5": "1a8866ef0fe38f3a8be31ddee0897566",
+    "sha": "0002c101f532f4a6b761355f9ec29ae5b9f0700f"
+  },
+  "_app_common/.pre-commit-config.yaml": {
+    "md5": "81ca4190b0b3389cc71fef82f106fa3c",
+    "sha": "4e66f94350ff5527a08399d06257fe10536b49e7"
+  },
+  "_app_common/README.md": {
+    "sha": "e8d369336d6c32d18e7f8eb2489320a6891b410b"
+  },
+  "_app_common/manifest.json": {
+    "sha": "1339ae8c01a96a9fa43f0010cc17dad1984a722c"
+  },
+  "_app_common/pyproject.toml": {
+    "md5": "ef752bafa2d11598a07892d99d274eec",
+    "sha": "df3d748f4161abf12c38741cd450e13395813755"
+  },
+  "_app_common/requirements.txt": {
+    "md5": "34e5b8dd2f173f499d9da13e1e56fbcd",
+    "sha": "b786088fdb180fee51f527d3392e227755d15532"
+  },
+  "playbook/basic/README.md": {
+    "sha": "62c1a700355e149e76a5d495c489845b5e40c783"
+  },
+  "playbook/basic/app.py": {
+    "sha": "12c9b0516c499a19a72cb570cf3384b3835c14bb"
+  },
+  "playbook/basic/app_inputs.json": {
+    "sha": "45c77c480e710795f1679fb3803b0dd3b3ce93f6"
+  },
+  "playbook/basic/app_inputs.py": {
+    "sha": "bd44e04f24992133c43d692b75573247010e35eb"
+  },
+  "playbook/basic/app_spec.yml": {
+    "sha": "3f2635a61f47b6b14b847a669e5f99500fe02912"
+  },
+  "playbook/basic/install.json": {
+    "sha": "fbf0979d63289028405753b3b14000bcbbcbf4cd"
+  },
+  "playbook/basic/manifest.json": {
+    "sha": "95b33cb2dc3c70e00a61ebe33f28270528254ad5"
+  },
+  "playbook/basic/playbook_app.py": {
+    "md5": "64b8a546958394e64f3cc611d62bad7f",
+    "sha": "67cc81b8ab2b07ed40d11fadc229bc69a6684cb7"
+  },
+  "playbook/basic/run.py": {
+    "md5": "feaa80690916220febd4eb7672911032",
+    "sha": "f53ce5fe4ca1580b7481eec0ee388395f64ac1b2"
+  },
+  "playbook/basic/tcex.json": {
+    "sha": "1d9d11ecdeddd679fa77735235de09f216aebd3f"
+  },
+  "playbook/utility/README.md": {
+    "md5": "2020258e6c5d12fff6eed0c7f9848ab8",
+    "sha": "936eafc73d981af79b716198b1aca3e1fb058125"
+  },
+  "playbook/utility/app.py": {
+    "md5": "d8edab8f4f9a3a0b65b7b318504b30b8",
+    "sha": "c021c7a0458dfaa5943534e0d40450df5b6bb846"
+  },
+  "playbook/utility/app_inputs.json": {
+    "md5": "d97d9db4be1c1abf54211e272ae19bd7",
+    "sha": "8a4b78ced5bfc03332c8ca6b49dab37ad2844e76"
+  },
+  "playbook/utility/app_inputs.py": {
+    "md5": "9d1e3e10215eb8a64fd4fc1b06db22fc",
+    "sha": "f28e6435859d24dae8d5c7d694fc0ba8b44f1ab1"
+  },
+  "playbook/utility/app_spec.yml": {
+    "md5": "a064b386ce0898e90ed19eb4e438ef50",
+    "sha": "877607b2ee3117982df748fdab7ab39447ebcbb8"
+  },
+  "playbook/utility/install.json": {
+    "md5": "8503046bd2a53593a4cbe00a0d7d3c53",
+    "sha": "588e04a2a26d89965c4e0acda050e6317e653546"
+  },
+  "playbook/utility/manifest.json": {
+    "md5": "bd112bfdb6c718cb7c594bf993a58ac0",
+    "sha": "79ea7aa5aadb87ba5e8ac85284aecc5d6e72c078"
+  },
+  "playbook/utility/tcex.json": {
+    "md5": "03b7e07142739bf9543a660ab20d9a10",
+    "sha": "80f4811f952ab14719413119b52f77dd9f8dd923"
+  }
+}
