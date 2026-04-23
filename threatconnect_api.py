@@ -97,10 +97,21 @@ class ThreatConnectAPI:
     def get_owners(self) -> dict[str, Any]:
         return self.get("/v2/owners")
 
-    def get_indicators(self, all: bool = False, *, params: dict[str, str] | None = None) -> dict[str, Any]:
-        if not all: 
-            return self.get("/v3/indicators", params=params)
+    def get_v3_objects(self, object_type: str, all: bool = False, total: int | None = None, *, params: dict[str, str] | None = None) -> dict[str, Any]:
+        data = {"data": []}
+        # if not all: 
+        #     data["data"].append(self.get(f"/v3/{object_type}", params=params))
+        #     return data
+        response = self.get(f"/v3/{object_type}", params=params)
+        data["data"].extend(response["data"])
+        while response.get("next") and (all or total):
+            if total:
+                total -= 
+            response = self.get(response["next"])
+            data["data"].extend(response["data"])
+        return data
+        
 
-    def get_groups(self, all: bool = False, *, params: dict[str, str] | None = None) -> dict[str, Any]:
-        if not all: 
-            return self.get("/v3/groups", params=params)
+    # def get_groups(self, all: bool = False, *, params: dict[str, str] | None = None) -> dict[str, Any]:
+    #     if not all: 
+    #         return self.get("/v3/groups", params=params)
