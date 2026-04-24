@@ -39,10 +39,10 @@ sections:
     required: true
     validValues:
     - ${TEXT}
-  - default: '4'
+  - default: '2'
     label: Indent
     name: indent
-    note: 'The number of spaces to use for indention (default: 4).'
+    note: 'The number of spaces to use for each indent level (default: 2).'
     playbookDataType:
     - String
     validValues:
@@ -50,6 +50,8 @@ sections:
   - default: false
     label: Sort Keys
     name: sort_keys
-    note: Indicates whether keys should be sorted.
+    note: When enabled, JSON object keys are sorted alphabetically at every level.
+      For HTML tree output this puts attrs before tag and is usually harder to read;
+      leave off for tag, attrs, children order.
     type: Boolean
   sectionName: Inputs

@@ -4,7 +4,7 @@ import json
 
 from tcex import TcEx
 
-from html_to_dict import html_string_to_dict
+from helpers.html_to_dict import html_string_to_dict
 from playbook_app import PlaybookApp  # Import default Playbook App Class (Required)
 
 
@@ -28,16 +28,7 @@ class App(PlaybookApp):
         if not isinstance(html, str):
             self.tcex.exit.exit(1, 'HTML input must be a string.')
 
-        tree = html_string_to_dict(html)
-
-        try:
-            self.pretty_json = json.dumps(
-                tree, indent=self.in_.indent, sort_keys=self.in_.sort_keys
-            )
-        except (TypeError, ValueError):
-            self.tcex.exit.exit(1, 'Failed serializing HTML tree to JSON.')
-
-        self.exit_message = 'HTML converted to JSON.'
+        
 
     def write_output(self):
         """Write the Playbook output variables.

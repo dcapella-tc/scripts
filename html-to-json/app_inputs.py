@@ -9,7 +9,7 @@ class AppBaseModel(AppPlaybookModel):
     """Base model for the App containing any common inputs."""
 
     # pbd: String, vv: ${TEXT}
-    indent: int = 4
+    indent: int = 2
     # pbd: String, vv: ${TEXT}
     html: str
     sort_keys: bool = False
